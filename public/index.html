@@ -30,7 +30,7 @@ button{cursor:pointer}button:hover{background:#2d3560}button.primary{background:
   <button class="primary" id="create">Create match</button></div>
  <div class="row"><input id="code" placeholder="Match code" size="8" maxlength="6"><button id="join">Join</button></div>
  <div class="msg" id="lmsg"></div>
- <details><summary>Rules (one paragraph)</summary><p>The 7×7 board has land worth 1–3 points and a central crown worth 5. You start in a corner. Each turn you gain <b>+3 energy</b> (bank up to 9) and may spend it on any number of actions: <b>Claim</b> an empty cell next to your land (cost = its value), <b>Raid</b> a rival's unfortified cell next to your land (cost = value + 2), or <b>Fortify</b> one of your cells (cost 2; it can't be raided until your next turn). After 10 rounds — or when the board fills — the player whose land is worth the most wins (ties: more cells).</p></details>
+ <details><summary>Rules (one paragraph)</summary><p>The 7×7 board has land worth 1–3 points and a central crown worth 5. You start in a corner. Each turn you gain <b>+3 energy</b> (bank up to 9) and may spend it on any number of actions: <b>Claim</b> an empty cell next to your land (cost = its value), <b>Raid</b> a rival's unfortified cell next to your land (cost = value + 2), or <b>Fortify</b> one of your cells (cost 2; it can't be raided until your next turn). After 10 rounds — or when the board fills — the player whose land is worth the most wins (ties: crown holder, then more cells).</p></details>
  <p class="mut">Agents: see the <a href="README.md" style="color:#ffd54f">JSON API</a>. Share the match code; empty seats can be filled with bots.</p>
 </section>
 <main id="game" style="display:none">

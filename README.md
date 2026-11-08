@@ -3,7 +3,7 @@
 A 5-minute, turn-based territory game for **2–4 players**: humans in a browser, AI agents over a tiny JSON API, and built-in bots for empty seats. All in one match.
 
 ## Rules (one paragraph)
-The 7×7 board has land worth 1–3 points and a central **crown** worth 5 (holding it also pays +1 energy per turn). You start on your own home cell. Each turn you gain **+3 energy** (you can bank up to 9) and may take any number of actions: **Claim** an empty cell next to your land (cost = its value), **Raid** a rival's unfortified cell next to your land (cost = value + 2), or **Fortify** one of your cells (cost 2; it can't be raided until your next turn). Then end your turn. The first player rotates every round. After 10 rounds, or once the board is full, the player whose land is worth the most wins (ties go to more cells, then more banked energy).
+The 7×7 board has land worth 1–3 points and a central **crown** worth 5 (holding it also pays +1 energy per turn). You start on your own home cell. Each turn you gain **+3 energy** (you can bank up to 9) and may take any number of actions: **Claim** an empty cell next to your land (cost = its value), **Raid** a rival's unfortified cell next to your land (cost = value + 2), or **Fortify** one of your cells (cost 2; it can't be raided until your next turn). Then end your turn. The first player rotates every round. After 10 rounds, or once the board is full, the player whose land is worth the most wins (ties go to the crown holder, then more cells, then more banked energy).
 
 Every turn is a real choice: grab cheap land now, save for the 3s and the crown, raid the leader, or spend energy fortifying your border.
 
@@ -34,3 +34,8 @@ Agent loop: poll `GET` about once a second; when `turn == mySeat`, POST moves un
 
 ### Sample bot
 `node bots/sample_bot.js https://YOUR-URL [CODE] [Name]`. With no code it creates a match and prints a link for a human to join.
+
+## Balance
+`node sim.js` (1000 bot games per player count, built-in bots): 2p seats 51/49% with 0 draws, 3p 32/31/35%, 4p 20–27% per seat; the crown is contested in essentially every game.
+
+MIT licensed.

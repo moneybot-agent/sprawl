@@ -83,9 +83,10 @@ function endTurn(g){
 function finish(g){
   g.status='finished';
   const scores = g.players.map((p,i)=>({seat:i,score:score(g,i),cells:g.board.filter(c=>c.owner===i).length}));
-  scores.forEach(s=>s.energy=g.players[s.seat].energy);
-  scores.sort((a,b)=>b.score-a.score || b.cells-a.cells || b.energy-a.energy);
-  const s0=scores[0],s1=scores[1]; g.winner = (s1 && s0.score===s1.score && s0.cells===s1.cells && s0.energy===s1.energy) ? null : s0.seat;
+  const crownOwner=g.board[3*g.size+3].owner;
+  scores.forEach(s=>{s.energy=g.players[s.seat].energy; s.crown=s.seat===crownOwner?1:0;});
+  scores.sort((a,b)=>b.score-a.score || b.crown-a.crown || b.cells-a.cells || b.energy-a.energy);
+  const s0=scores[0],s1=scores[1]; g.winner = (s1 && s0.score===s1.score && s0.crown===s1.crown && s0.cells===s1.cells && s0.energy===s1.energy) ? null : s0.seat;
   g.log.push({round:g.rounds,seat:null,text: g.winner===null ? 'Match ends in a draw.' : `${g.players[g.winner].name} wins with ${scores[0].score} points!`});
 }
 
@@ -93,12 +94,15 @@ function finish(g){
 function botMove(g, seat, rand=Math.random){
   const moves = legalMoves(g,seat); const e=g.players[seat].energy;
   const lead = g.players.map((_,i)=>score(g,i));
-  let best={action:'end'}, bestS = e>=6 ? -1 : 0.4; // banking is sometimes right
+  const crownC=cell(g,3,3), crownNear=crownC.owner!==seat && touches(g,crownC,seat) && !crownC.fort;
+  let best={action:'end'}, bestS = e>=6 ? -1 : (crownNear && e<(crownC.owner===null?5:7) ? 1.6 : 0.4); // banking is sometimes right
+  const crownCost = crownC.owner===null?5:7;
+  if (crownNear && e<crownCost && rand()<0.85) return {action:'end'}; // save up for the crown
   for (const m of moves){
     if (m.action==='end') continue;
     const c = cell(g,m.x,m.y); let s;
-    if (m.action==='claim') s = c.value/m.cost + c.value*0.3 + neighbors(g,c).filter(n=>n.owner===null).length*0.1;
-    else if (m.action==='raid') s = (c.value*2)/m.cost + (lead[c.owner]>=Math.max(...lead)?0.5:0);
+    if (m.action==='claim') s = (c.value===5?1.5:0) + c.value/m.cost + c.value*0.3 + neighbors(g,c).filter(n=>n.owner===null).length*0.1 - (Math.abs(c.x-3)+Math.abs(c.y-3))*0.12;
+    else if (m.action==='raid') s = (c.value===5?1.2:0) + (c.value*2)/m.cost + (lead[c.owner]>=Math.max(...lead)?0.5:0);
     else { const threatened = neighbors(g,c).some(n=>n.owner!==null&&n.owner!==seat); s = threatened ? c.value*0.35 : -1; }
     s += rand()*0.8;
     if (s>bestS){ bestS=s; best=m; }
