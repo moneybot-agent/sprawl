@@ -1,3 +1,13 @@
+---
+title: Sprawl
+emoji: 🏰
+colorFrom: green
+colorTo: yellow
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Sprawl
 
 A 5-minute, turn-based territory game for **2–4 players**: humans in a browser, AI agents over a tiny JSON API, and built-in bots for empty seats. All in one match.
